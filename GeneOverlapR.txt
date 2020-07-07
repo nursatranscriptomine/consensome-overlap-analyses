@@ -1,0 +1,33 @@
+> library GeneOverlap
+> ls()
+ [1] "gs"                "listEMT"            "listVirus"        
+> str(listVirus)
+List of 5
+ $ CoV_ALL  : chr [1:1116] "HEBP1" "MGST2" "CLK1" "FUCA1" ...
+ $ SARS1_ALL: chr [1:893] "MARCH8" "ABL2" "ABLIM1" "ABTB2" ...
+ $ SARS2_ALL: chr [1:496] "SELENOF" "ABL2" "ABTB2" "ACAT2" ...
+ $ MERS     : chr [1:1080] "MARC2" "AAMDC" "AASS" "ABCB7" ...
+ $ IAV      : chr [1:744] "MARCH6" "AADAT" "ABCA3" "ABCC4" ...
+> str(listEMT)
+List of 1
+ $ EMT: chr [1:337] "ACVR1" "ADAM17" "AGER" "AKT1" ...
+> sapply(listVirus,length)
+  CoV_ALL SARS1_ALL SARS2_ALL      MERS       IAV 
+     1116       893       496      1080       744 
+> sapply(listEMT,length)
+EMT 
+337 
+> gom.obj<-newGOM(listVirus,listEMT,gs)
+> pval<-getMatrix(gom.obj,"pval")
+> odds<-getMatrix(gom.obj,"odds.ratio")
+> int<-getMatrix(gom.obj,"intersection")
+> qval<-p.adjust(pval,method="BH")
+> results<-cbind(int,odds,pval,qval)
+> colnames(results)<-c("Intersection","Odds Ratio","P-value","Q-value")
+> results
+          Intersection Odds Ratio      P-value      Q-value
+CoV_ALL             32   2.282109 5.317371e-05 1.329343e-04
+SARS1_ALL           15   1.261941 2.268587e-01 2.268587e-01
+SARS2_ALL           34   5.876951 8.900496e-15 4.450248e-14
+MERS                19   1.329088 1.443439e-01 1.804299e-01
+IAV                 24   2.549783 8.179648e-05 1.363275e-04
